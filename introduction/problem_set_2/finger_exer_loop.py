@@ -33,7 +33,7 @@ def get_largest_odd(nums):
 
 
 if __name__ == "__main__":
-    ENTRIES = 10
+    ENTRIES = 3
     input = get_num_list(entries=ENTRIES)
     output = get_largest_odd(nums=input)
     if output == 0:
