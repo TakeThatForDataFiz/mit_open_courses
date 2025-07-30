@@ -8,8 +8,6 @@ import sys
 sys.path.append("../")
 import finger_exer_powers as p
 
-
-
 @pytest.mark.parametrize(
     "input, exp_val",
     [
@@ -19,7 +17,7 @@ import finger_exer_powers as p
 ]
 )
 def test_finger_power_exer(input, exp_val):
-   assert p.get_root_and_power(input) == exp_val 
+    assert p.get_root_and_power(input) == exp_val 
 
 if __name__ == "__main__":
     pytest.main()
