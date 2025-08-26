@@ -25,7 +25,12 @@ def load_cows(filename):
     a dictionary of cow name (string), weight (int) pairs
     """
     # TODO: Your code here
-    pass
+    cow_dict = {}
+    with open(filename, 'r') as f:
+        for line in f:
+            name, weight = line.split(",")
+            cow_dict[name] = int(weight)
+    return cow_dict
 
 # Problem 2
 def greedy_cow_transport(cows,limit=10):
@@ -51,7 +56,20 @@ def greedy_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
-    pass
+    total_trips = []
+    sorted_cows = {k: v for k, v in sorted(cows.items(), key=lambda item: item[1], reverse=True)}
+    weight_total = 0
+    local_trip = []
+    for cow, weight in sorted_cows.items():
+        if weight_total + weight <= limit:
+            local_trip.append(cow)
+            weight_total += weight
+        else:
+            total_trips.append(local_trip)
+            weight_total = weight
+            local_trip = [cow]
+    total_trips.append(local_trip)
+    return total_trips
 
 # Problem 3
 def brute_force_cow_transport(cows,limit=10):
@@ -76,8 +94,19 @@ def brute_force_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
-    pass
-        
+    eligible_combos = []
+    for item in get_partitions(list(cows.keys())):
+        eligible_combos.append(item)
+        for cow_combo in item:
+            total_weight = 0
+            for cow in cow_combo:
+                total_weight += cows[cow]
+            if total_weight > limit:
+                if len(eligible_combos) > 0:
+                    eligible_combos.pop()
+                else:
+                    continue
+    return min(eligible_combos, key=len)
 # Problem 4
 def compare_cow_transport_algorithms():
     """
@@ -93,4 +122,15 @@ def compare_cow_transport_algorithms():
     Does not return anything.
     """
     # TODO: Your code here
-    pass
+    cows = load_cows("ps1_cow_data.txt")
+    start = time.time()
+    print(f"Number of Greedy trips: {len(greedy_cow_transport(cows=cows, limit=10))}")
+    end = time.time()
+    print(f"Greedy Algorithm took {end - start} seconds")
+    start = time.time()
+    print(f"Number of Brute trips: {len(brute_force_cow_transport(cows=cows, limit=10))}")
+    end = time.time()
+    print(f"Brute Force Algorithm took {end - start} seconds")
+
+if __name__ == "__main__":
+    compare_cow_transport_algorithms()
